@@ -32,7 +32,7 @@ set.seed(0)
 
 # Overview
 This notebook demonstrates using `caret::train()` to build classifiers for the TB Nanostring dataset.
-We'll: load data, split train/test, fit multiple algorithms, compare accuracies, and plot results.
+We'll load data, split train/test, fit multiple algorithms, compare accuracies, and plot results.
 
 ## 0. Introduction: TB NanoString Dataset
 This dataset is derived from a published study in Clinical Infectious Diseases (Kaipilyawar et al., 2022) that aimed to distinguish active **tuberculosis (TB)** from **latent TB infection (LTBI)** using gene expression measured in peripheral blood. The authors selected a panel of 107 TB-relevant genes and profiled their expression levels in blood samples from individuals with active disease and those with latent infection.
@@ -53,7 +53,7 @@ In our analyses, we treat the **TB status** as the response (binary classificati
 TBnanostring <- readRDS("TBnanostring.rds")
 TBnanostring[[1]] <- as.factor(TBnanostring[[1]])
 colnames(TBnanostring)[1] <- "TB_Status"
-datatable(head(TBnanostring), options = list(pageLength = 5))
+datatable(TBnanostring, options = list(pageLength = 10))
 ```
 
 ## 1. The `caret` Package
@@ -161,19 +161,17 @@ The KNN algorithm classifies a sample based on the majority label among its k ne
 set.seed(123)
 knn_model <- train(TB_Status ~ ., data = train_data, 
                    method = "knn",
-                   metric = "ROC", tuneLength = 10, 
+                   metric = "ROC", tuneLength = 2, 
                    trControl = ctrl_cv, preProcess = c("center", "scale"))
 
 knn_model
 plot(knn_model)
 
 # Predictions and performance
-```{r}
 knn_pred <- predict(knn_model, test_data)
 confusionMatrix(knn_pred, test_data$TB_Status)
 
 # ROC and AUC
-```{r}
 knn_probs <- predict(knn_model, test_data, type = "prob")[, "TB"]
 knn_roc <- roc(test_data$TB_Status, knn_probs, levels = rev(levels(test_data$TB_Status)))
 plot(knn_roc, main = paste("KNN ROC Curve (AUC =", round(auc(knn_roc), 3), ")"))
@@ -196,7 +194,6 @@ rf_pred <- predict(rf_model, test_data)
 confusionMatrix(rf_pred, test_data$TB_Status)
 
 # Variable Importance
-```{r}
 rf_imp <- varImp(rf_model, scale = TRUE)
 plot(rf_imp, top = 10, main = "Top 10 Important Genes (Random Forest)")
 
@@ -271,15 +268,10 @@ GBMs build an ensemble of shallow trees sequentially, where each tree corrects e
 
 ```{r}
 set.seed(123)
-gbm_model <- train(
-  TB_Status ~ ., 
-  data = train_data,
-  method = "gbm",
-  metric = "ROC",
-  trControl = ctrl_cv,
-  verbose = FALSE,
-  tuneLength = 10
-)
+gbm_model <- train(TB_Status ~ ., data = train_data,
+  method = "gbm", metric = "ROC",
+  trControl = ctrl_cv, verbose = FALSE,
+  tuneLength = 10)
 
 gbm_model
 plot(gbm_model)
@@ -290,7 +282,7 @@ confusionMatrix(gbm_pred, test_data$TB_Status)
 
 # Variable Importance
 gbm_imp <- varImp(gbm_model, scale = TRUE)
-plot(gbm_imp, top = 10, main = "Top 10 Important Genes (GBM)")
+plot(gbm_imp, top = 20, main = "Top 10 Important Genes (GBM)")
 
 # ROC and AUC
 gbm_probs <- predict(gbm_model, test_data, type = "prob")[, "TB"]
