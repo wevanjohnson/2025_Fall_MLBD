@@ -133,6 +133,7 @@ The `trainControl()` function in caret defines how model training and performanc
 ctrl_cv <- trainControl(method = "repeatedcv", number = 5, repeats = 3,
                         classProbs = TRUE, summaryFunction = twoClassSummary,
                         savePredictions = "final", verboseIter = FALSE)
+
 ctrl_none <- trainControl(method = "none", classProbs = TRUE, summaryFunction = twoClassSummary)
 
 set.seed(123)
@@ -240,10 +241,12 @@ Neural networks approximate nonlinear relationships through layers of interconne
 
 ```{r}
 set.seed(123)
-nnet_model <- train(TB_Status ~ ., data = train_data,
+suppressWarnings(
+  nnet_model <- train(TB_Status ~ ., data = train_data,
   method = "nnet", metric = "ROC",
   preProcess = c("center", "scale"), trControl = ctrl_cv,
   tuneLength = 10, trace = FALSE)
+)
 
 nnet_model
 plot(nnet_model)
@@ -294,7 +297,34 @@ auc(gbm_roc)
 Interpretation:
 GBMs often outperform other models due to their ability to model complex interactions, though they require careful tuning of learning rate and tree depth.
 
-## 11. Session info
+## 11. Ensemble Learning 
+A common way to boost model performance is to combine several different models into one – a technique known as ensemble learning. The idea is that by pooling the strengths of multiple models, we can create a sort of “super model” that performs better than any single one on its own. Let’s now take the models we created earlier, integrate them into an ensemble framework, and evaluate the results.
+
+```{r}
+library(caretEnsemble)
+set.seed(123)
+methods_list <- c("knn", "svmRadial", "gbm")
+# Use caretList() much like we use train(), except this time we pass in multiple algorithms to run at once.
+suppressMessages(
+  suppressWarnings(
+    models <- caretList(TB_Status ~ . , data = train_data,
+                    trControl = ctrl_cv, metric = "ROC",
+                    tuneLength = 10, methodList = methods_list)
+  ))
+# Try a ensemble using 'random forest' of our individual models
+ens <- caretStack(models, metric = "ROC", method = "rf", 
+                  trControl = ctrl_cv)
+
+# ROC and AUC
+ens_probs <- unlist(predict(ens, test_data)[,"TB"])
+ens_roc <- roc(test_data$TB_Status, ens_probs, levels = rev(levels(test_data$TB_Status)))
+plot(ens_roc, main = paste("Ensemble ROC Curve (AUC =",
+                           round(auc(ens_roc), 3), ")"))
+auc(ens_roc)
+```
+
+
+## 12. Session info
 ```{r}
 sessionInfo()
 ```
