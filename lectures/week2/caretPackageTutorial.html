@@ -4259,6 +4259,7 @@ it.</p>
 <pre class="r"><code>ctrl_cv &lt;- trainControl(method = &quot;repeatedcv&quot;, number = 5, repeats = 3,
                         classProbs = TRUE, summaryFunction = twoClassSummary,
                         savePredictions = &quot;final&quot;, verboseIter = FALSE)
+
 ctrl_none &lt;- trainControl(method = &quot;none&quot;, classProbs = TRUE, summaryFunction = twoClassSummary)
 
 set.seed(123)
@@ -4923,9 +4924,12 @@ an ensemble framework, and evaluate the results.</p>
 set.seed(123)
 methods_list &lt;- c(&quot;knn&quot;, &quot;svmRadial&quot;, &quot;gbm&quot;)
 # Use caretList() much like we use train(), except this time we pass in multiple algorithms to run at once.
-models &lt;- caretList(TB_Status ~ . , data = train_data,
+suppressMessages(
+  suppressWarnings(
+    models &lt;- caretList(TB_Status ~ . , data = train_data,
                     trControl = ctrl_cv, metric = &quot;ROC&quot;,
-                    tuneLength = 10, methodList = methods_list)</code></pre>
+                    tuneLength = 10, methodList = methods_list)
+  ))</code></pre>
 <pre><code>## Iter   TrainDeviance   ValidDeviance   StepSize   Improve
 ##      1        1.2356             nan     0.1000    0.0629
 ##      2        1.1414             nan     0.1000    0.0429
