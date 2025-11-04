@@ -1,6 +1,6 @@
 ---
 title: "Homework 2"
-author: "Due date: 11/11/25"
+author: "Due date: 11/14/25"
 output:
   html_document:
     code_folding: show
