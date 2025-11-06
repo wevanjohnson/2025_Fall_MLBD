@@ -48,7 +48,7 @@ However, there are applications in which unsupervised learning can be a powerful
 
 ## Unsupervised Machine Learning
 \Large
-There are many algorithms for unsupervised learning. We have already learned about __PCA__ and __UMAP__ for dimension reduction. Here we introduce two methods for clustering: __hierarchical clustering__ and __k-means__.
+There are many algorithms for unsupervised learning. We will learn next week about __PCA__ and __UMAP__ for dimension reduction. Here we introduce two methods for clustering: __hierarchical clustering__ and __k-means__.
 
 
 ## Unsupervised Machine Learning and clustering
