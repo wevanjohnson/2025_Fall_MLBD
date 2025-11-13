@@ -58,7 +58,7 @@ The technique behind it all, the singular value decomposition, is also useful in
 
 ## Dimension reduction: twin heights 
 
-We consider an= simulated example with twin heights (children and adults):
+We consider a simulated example with twin heights (children and adults):
 
 ```{r, message=FALSE}
 set.seed(1988)
@@ -293,7 +293,7 @@ illustrate_pca(x)
 We plot the first two PCs with color representing the species:
 \small
 ```{r iris-pca, out.width="80%", fig.align='center'}
-data.frame(pca$x[,1:2], Species=iris$Species) %>% 
+data.frame(pca$x[,1:4], Species=iris$Species) %>% 
   ggplot(aes(PC1,PC2, fill = Species))+
   geom_point(cex=3, pch=21) +
   coord_fixed(ratio = 1)
