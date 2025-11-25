@@ -108,6 +108,16 @@ Boosting can achieve very high predictive accuracy but requires careful tuning t
 \center
 ![](treeFigs/llustration-of-a-Gradient-Boosting-Machine.png){width=50%}
 
+## Gradient Boosting Machines (GBMs)
+\Large
+The core idea is **sequential error correction**:
+
+\normalsize
+1.  **Tree 1 (Weak Learner):** Makes an initial prediction.
+2.  **Tree 2:** Is trained to predict and correct the **residual errors** (or gradients of the loss function) from the combined output of all previous trees.
+3.  This process continues, with each new tree $f_k(\mathbf{x})$ added to the ensemble to minimize the total error. $$\hat{y} = \hat{y}_0 + \sum_{k=1}^K \eta \cdot f_k(\mathbf{x})$$ The final prediction is the sum of the initial prediction ($\hat{y}_0$) and all subsequent tree predictions, scaled by the **learning rate** ($\eta$).
+
+
 ## GBM Example: Iris
 
 ```{r}
@@ -138,7 +148,6 @@ print(gbm_fit)
 
 ## GBM Example: Iris
 ```{r,fig.height=5,fig.width=7, out.width="50%"}
-# Plot the tuning results
 plot(gbm_fit)
 ```
 
@@ -150,81 +159,150 @@ confusionMatrix(gbm_predictions, iris$Species)
 ```
 
 
+
 ## Extreme Gradient Boosting (XGBoost)
 
 \Large
 **XGBoost** (Extreme Gradient Boosting) is a highly optimized and scalable implementation of **Gradient Boosting Machines (GBMs)**. It builds upon the idea of decision trees and boosting.
 
-## Extreme Gradient Boosting (XGBoost)
-\Large
-The core idea is **sequential error correction**:
-\normalsize
-1.  **Tree 1 (Weak Learner):** Makes an initial prediction.
-2.  **Tree 2:** Is trained to predict and correct the **residual errors** (or gradients of the loss function) from the combined output of all previous trees.
-3.  This process continues, with each new tree $f_k(\mathbf{x})$ added to the ensemble to minimize the total error.
-
-$$\hat{y} = \hat{y}_0 + \sum_{k=1}^K \eta \cdot f_k(\mathbf{x})$$
-
-The final prediction is the sum of the initial prediction ($\hat{y}_0$) and all subsequent tree predictions, scaled by the **learning rate** ($\eta$).
-
----
 
 ## XGBoost: Key Enhancements
 
 \Large
 XGBoost improves upon traditional GBMs with several critical enhancements for performance and generalization:
 
-\normalsize
 * **Regularization:** Includes both $\mathbf{L1}$ (Lasso) and $\mathbf{L2}$ (Ridge) terms in the objective function to explicitly **penalize complexity** and prevent overfitting, which is common in boosting.
 * **Parallel Computing:** Optimized to run tree construction in parallel, offering significant **speed gains** compared to older GBM implementations.
+
+## XGBoost: Key Enhancements (continued)
+
+\Large
 * **Handling Missing Values:** It has a built-in method to intelligently handle missing data by allowing the algorithm to **learn the best path** (left or right split) for null values.
 * **Learning Rate ($\eta$):** A small $\eta$ (e.g., $0.01$ to $0.3$) is used to **shrink** the contribution of each tree, making the learning process slow and more robust, requiring more trees (`nrounds`).
 
 \Large XGBoost often yields superior accuracy compared to Random Forests, but remains relatively interpretable through Feature Importance plots.
 
----
+## XGBoost: Iris Example
+
+```{r}
+data("iris")
+set.seed(42)  # reproducibility
+ctrl <- trainControl(method = "cv", number = 5) # 5-fold CV
+xgbGrid <- expand.grid(
+  nrounds = c(50, 100, 150),     # number of boosting iterations
+  max_depth = c(1, 3, 5),        # tree depth
+  eta = 0.1,                     # learning rate
+  gamma = 0,                     # min loss reduction
+  colsample_bytree = 1,          # feature subsample
+  min_child_weight = 1,          # minimum sum of instance weight
+  subsample = 1                  # row subsample
+)
+```
+
+## XGBoost: Iris Example
+```{r, warning=FALSE}
+xgb_fit <- train(
+  Species ~ ., data = iris,
+  method = "xgbTree",
+  trControl = ctrl,
+  tuneGrid = xgbGrid,
+  verbose = FALSE
+)
+```
+
+## XGBoost: Iris Example
+```{r,fig.height=5,fig.width=7, out.width="50%"}
+plot(xgb_fit)
+```
+
+## XGBoost: Iris Example
+\footnotesize
+```{r, warning=FALSE}
+xgb_predictions <- predict(xgb_fit, newdata = iris)
+confusionMatrix(xgb_predictions, iris$Species)
+```
 
 
-## LIME: Local Explanations
+## LIME: Local Interpretable Model-agnostic Explanations
 
 \Large
 **LIME** focuses on explaining an **individual prediction** by building a simple, interpretable model *around* the prediction point.
 
-\small
 **Intuition: Trusting a local neighborhood.**
-\begin{enumerate}
-    \item \textbf{Select a prediction}: Choose one data point $\mathbf{x}$ to explain.
-    \item \textbf{Generate neighbors}: Perturb the data point $\mathbf{x}$ to create many new, slightly modified "neighbor" points.
-    \item \textbf{Weight neighbors}: Weight these neighbors based on their proximity to $\mathbf{x}$.
-    \item \textbf{Train a simple model}: Train a simple, interpretable model (like a linear regression or a shallow decision tree) on these weighted, perturbed data points.
-    \item \textbf{Explain}: The parameters of the simple model locally approximate the behavior of the complex model and provide the feature contribution for that single prediction.
-\end{enumerate}
 
-\normalsize
+1. **Select a prediction**: Choose one data point $\mathbf{x}$ to explain.
+2. **Generate neighbors**: Perturb the data point $\mathbf{x}$ to create many new, slightly modified "neighbor" points.
+
+## LIME: Local Interpretable Model-agnostic Explanations
+
+\Large
+3. **Weight neighbors**: Weight these neighbors based on their proximity to $\mathbf{x}$.
+4. **Train a simple model*}**: Train a simple, interpretable model (like a linear regression or a shallow decision tree) on these weighted, perturbed data points.
+5.  **Explain}** The parameters of the simple model locally approximate the behavior of the complex model and provide the feature contribution for that single prediction.
+
+## LIME: Local Interpretable Model-agnostic Explanations
+\Large
 **Key Feature**: LIME explanations are **local**—they only explain *why* a specific data point $\mathbf{x}$ received its prediction. 
 
-## SHAP: Global and Local Explanations
+
+## LIME Example: GBM on Iris Data
+\Large
+```{r, message=F}
+# install.packages("lime")
+library(lime)
+iris_features <- iris[, -5]
+
+# Create a LIME explainer for the GBM model
+gbm_explainer <- lime(
+  x = iris_features,
+  model = gbm_fit
+)
+```
+
+## LIME Example: GBM on Iris Data
+\Large
+```{r}
+# first 2 iris samples
+samples_to_explain <- iris_features[1:2, ] 
+
+gbm_lime_results <- explain(
+  x = samples_to_explain,
+  explainer = gbm_explainer,
+  n_features = 4,
+  n_labels = 1
+)
+```
+
+## LIME Example: GBM on Iris Data
+```{r,fig.height=4,fig.width=8, out.width="75%"}
+plot_features(gbm_lime_results)
+```
+
+## SHAP: SHapley Additive exPlanations
 
 \Large
 **SHAP** connects optimal feature attribution with game theory, providing a single, consistent framework to measure the contribution of each feature.
 
-\small
 SHAP values are based on **Shapley values** from cooperative game theory.
 
+## SHAP: SHapley Additive exPlanations
+\Large
 \begin{itemize}
     \item The features of a model are considered the "players" in a "coalition."
     \item The prediction is the "payout."
     \item The SHAP value for a feature is its average marginal contribution across all possible feature combinations (coalitions).
 \end{itemize}
 
+## SHAP: SHapley Additive exPlanations
+\Large
 **Key Properties:**
-\begin{itemize}
-    \item **Consistency**: A feature that contributes more (or the same) to the prediction should always be assigned a higher (or equal) SHAP value.
-    \item **Model-Agnostic**: Can be used for any model, although faster implementations exist for tree ensembles (Tree SHAP).
-    \item **Global and Local**: SHAP can explain a single prediction (**Local**) and can be aggregated to visualize overall feature importance and relationships (**Global**).
-\end{itemize}
 
-\normalsize
+* **Consistency**: A feature that contributes more (or the same) to the prediction should always be assigned a higher (or equal) SHAP value.
+* **Model-Agnostic**: Can be used for any model, although faster implementations exist for tree ensembles (Tree SHAP).
+* **Global and Local**: SHAP can explain a single prediction (**Local**) and can be aggregated to visualize overall feature importance and relationships (**Global**).
+
+## SHAP: SHapley Additive exPlanations
+\Large
 **Interpretation**: A SHAP value represents the feature's contribution to the prediction, pushing it either higher or lower than the average prediction. 
 
 
