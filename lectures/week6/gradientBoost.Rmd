@@ -263,7 +263,7 @@ gbm_explainer <- lime(
 \Large
 ```{r}
 # first 2 iris samples
-samples_to_explain <- iris_features[1:2, ] 
+samples_to_explain <- iris_features[c(1,51,101), ] 
 
 gbm_lime_results <- explain(
   x = samples_to_explain,
