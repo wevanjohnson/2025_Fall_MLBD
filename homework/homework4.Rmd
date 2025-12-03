@@ -1,0 +1,119 @@
+---
+title: "Homework 4 (Final Project)"
+author: "Due date: 12/19/25"
+output:
+  html_document:
+    code_folding: show
+    toc: true
+    toc_float: true
+    theme: "flatly"
+editor_options:
+  chunk_output_type: console
+---
+
+# Homework 4 — Final Project: End-to-End Analysis of a Dataset of Your Choice
+
+For this final project, you will choose a dataset of personal or research interest and demonstrate mastery of the analytical and machine-learning techniques introduced in this course.  
+Your work should be submitted as an **R Markdown (`.Rmd`) file** with rendered **HTML output**, including narrative explanations, code, and figures.
+
+---
+
+## **Project Overview & Requirements (100 points)**
+
+### **1. Dataset Description and Research Questions (20 pts)**
+
+Select **any dataset of interest**—from your own research, publicly available repositories, or other sources.  
+
+Provide the following:
+
+- A **clear description of the dataset**, including:
+  - Number of observations  
+  - Variables/features included  
+  - The scientific or practical context  
+- A **clearly defined hypothesis or set of questions** you aim to answer  
+
+**Write at least one paragraph** describing:
+- Why this dataset interests you  
+- What specific relationships, predictions, or structure you intend to investigate  
+
+```{r data-description, eval=FALSE}
+# Example structure (students replace with their own)
+# mydata <- read_csv("mydata.csv")
+# glimpse(mydata)
+```
+
+### **2. Apply at Least Four Machine Learning Approaches (40 pts)**
+You must apply **at least four techniques** covered in the class:
+
+* **At least 1 unsupervised method** (e.g., PCA, t-SNE, UMAP, clustering, dimension reduction)
+* **At least 1 supervised method** (e.g., SVM, Random Forest, XGBoost, Logistic Regression, Neural Networks)
+* The remaining methods may be either supervised or unsupervised.
+
+For **each** technique, include:
+
+* A short explanation of why you chose it
+* The R code implementing the method
+* Visualization(s) illustrating the method
+* A brief interpretation of your results
+
+**Example section template** (students should copy/modify this):
+
+#### **2.X Method Name (e.g., PCA, SVM, RF, etc.)**
+Explanation (what this method does and why you used it)
+
+```{r}
+# Your code here
+```
+
+
+### **3. Visualizations (20 pts)** 
+Your project must include multiple high-quality visualizations, such as:
+
+* PCA plots
+* Heatmaps
+* Variable importance plots
+* ROC curves
+* Confusion matrices
+* Cluster dendrograms
+* SHAP/LIME explanations
+* Neural-network architecture or training curves
+
+Each visualization should be accompanied by a caption or short explanation.
+
+##### Visualization(s)
+Introduce each of your plots
+
+```{r}
+#Plots here
+```
+
+Interpretation and briefly summarize what this method reveals about your dataset.
+
+### **4. Summary & Conclusions (20 pts)** 
+Provide a coherent summary of:
+
+* Your dataset
+* The machine learning methods you applied
+* What each method contributed to your understanding
+* Which techniques performed best and why
+* Limitations and what future analysis might look like
+
+This section should be **at least 2–3 paragraphs**.
+
+
+### Deliverables
+Please Submit:
+
+1. Completed .Rmd file
+2. Rendered HTML report
+3. All code, narrative text, visualizations, and interpretations included
+
+### Grading Summary
+
+| Component                                                                 | Points |
+|---------------------------------------------------------------------------|--------|
+| Dataset description & hypotheses                                          | 20     |
+| Application of ≥4 ML methods (≥1 unsupervised, ≥1 supervised)             | 40     |
+| Plots & visualizations for each method                                    | 20     |
+| Summary of results                                                        | 20     |
+| **Total**                                                                 | **100**|

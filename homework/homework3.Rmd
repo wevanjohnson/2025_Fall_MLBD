@@ -1,0 +1,176 @@
+---
+title: "Homework 3"
+author: "Due date: 12/12/25"
+output:
+  html_document:
+    code_folding: show
+    toc: true
+    toc_float: true
+    theme: "flatly"
+editor_options:
+  chunk_output_type: console
+---
+## Homework 3: Dimension Reduction & Advanced Supervised Learning on TB Nanostring Data
+
+In this assignment you will apply dimension reduction, advanced predictive modeling, and model explainability techniques to the TB Nanostring dataset.
+
+To get you started, first load the dataset:
+
+```{r}
+TBnanostring <- readRDS("TBnanostring.rds")
+str(TBnanostring)
+```
+
+Assume the first column is the TB status outcome (e.g. Active TB vs Control), and the remaining columns are Nanostring gene expression features.
+
+You will need to use `tidyverse`, `caret`, `umap`, `e1071`, `randomForest`, `xgboost`, `keras`, `lime`, `iml`, or similar libraries.
+
+### Question 1. Dimension Reduction (PCA & UMAP) — 30 pts
+
+#### Task 1.1 — PCA Computation (10 pts)
+
+1. Run PCA on all gene expression variables. C
+2. Create a data frame with PC1, PC2, and TB Status.
+3. Produce a PCA scatterplot colored by TB Status.
+
+```{r}
+# TODO: PCA code
+```
+
+#### Task 1.2 — PCA Interpretation (5 pts)
+
+1. Please report what percent of total variance is explained by PC1 and PC2.
+2. Comment on whether groups separate visually.
+
+```{r}
+# TODO: Interpretation
+```
+
+#### Task 1.3 — UMAP (15 pts)
+
+1. Apply UMAP using the umap package.
+2. Create a 2D plot colored by TB Status.
+3. Compare the separation of groups in PCA vs UMAP.
+
+```{r}
+# TODO: UMAP + plot + comparison
+```
+
+### Question 2. Classification Models (SVM, RF, XGBoost) — 45 pts
+First, please split the dataset into 70% training / 30% test.
+
+```{r}
+# TODO: Train/test split
+```
+
+Use cross-validation where appropriate.
+
+#### Task 2.1 — SVM with Linear and RBF Kernels (15 pts)
+
+1. Fit a linear kernel SVM
+2. Fit a radial basis kernel SVM
+3. Report accuracy, sensitivity, specificity
+3. Include a confusion matrix for each
+4. Briefly compare: which kernel works better and why?
+
+```{r}
+# TODO: Fit linear + RB SVM, evaluate both
+```
+
+#### Task 2.2 — Random Forest (15 pts)
+
+1. Fit a random forest classifier:
+2. Tune mtry using caret or ranger
+3. Report test accuracy and ROC/AUC
+4. Plot variable importance
+5. Comment on which genes appear most predictive
+
+
+```{r}
+# TODO: Random forest + tuning + importance plot
+```
+
+#### Task 2.3 — XGBoost Classification (15 pts)
+
+1. Convert data to xgb.DMatrix
+2. Fit an XGBoost classifier (binary:logistic objective)
+3. Tune at least 2–3 hyperparameters (max_depth, eta, nrounds, etc.)
+4. Report test accuracy and ROC/AUC
+5. Plot XGBoost feature importance
+
+```{r}
+# TODO: XGBoost workflow + evaluation + importance
+```
+
+### Question 3. Explainability: SHAP & LIME — 15 pts
+Use either your Random Forest or XGBoost model.
+
+#### Task 3.1 — SHAP Values (10 pts)
+
+1. Use iml or shapviz to compute SHAP values.
+2. Create a SHAP summary plot (beeswarm)
+3. Create a SHAP dependence plot for the top gene
+4. Briefly interpret: Which genes increase risk of TB? Which genes are protective?
+
+```{r}
+# TODO: SHAP code + plots + interpretation
+```
+
+#### Task 3.2 — LIME (5 pts)
+
+1. Select 3 random observations
+2. Use LIME to explain each prediction
+3. Provide at least one LIME explanation plot or table
+
+```{r}
+# TODO: LIME explanation for 3 samples
+```
+
+### Question 4. Neural Network Classifier — 10 pts
+
+Build and evaluate a feed-forward neural network using keras:
+
+1. Standardize all features
+2. Use a simple architecture:
+Dense(64, activation = "relu")
+Dense(32, activation = "relu")
+Dense(1, activation = "sigmoid")
+Use early stopping
+Report test accuracy and ROC/AUC
+Compare performance to SVM, RF, and XGBoost
+
+```{r}
+# TODO: Neural net model + evaluation
+```
+
+### Question 5. Model Comparison Summary — 10 pts
+
+Create a table of:
+
+| Model          | Test Accuracy | AUC  | Notes                  |
+|----------------|---------------|------|-------------------------|
+| Linear SVM     | TODO          | TODO | TODO                    |
+| RBF SVM        | TODO          | TODO | TODO                    |
+| Random Forest  | TODO          | TODO | TODO                    |
+| XGBoost        | TODO          | TODO | TODO                    |
+| Neural Network | TODO          | TODO | TODO                    |
+
+
+
+Write a short paragraph:
+
+* Which model performed best?
+* Did dimension reduction (PCA/UMAP) help or reveal structure?
+* Do interpretable models (SHAP/LIME) agree with variable importance?
+
+```{r}
+# TODO: Final comparison
+```
+
+Deliverables: Please submit the following: 
+
+1. Completed Rmd file
+2. Rendered HTML report
+3. All plots (PCA, UMAP, confusion matrices, ROC curves, feature importance, SHAP, LIME)
+4. Written interpretation for each task
+

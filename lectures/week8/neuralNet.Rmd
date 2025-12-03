@@ -35,6 +35,13 @@ img_path <- "nnFigs/"
 ```
 
 
+## Homework and Plans
+\Large
+
+1. Homework 3: Dimension reduction, SVM, RF, XGBoost, SHAP/LIME, NN on TB Nanostring data (Due 12/12).
+2. Homework 4 (Final Project): Analyze your own dataset using concepts from this class (Due 12/19).
+3. Next week's lectures: Office hours to help with last assignment and final project
+
 ## Introduction to Neural Networks
 \Large
 The human brain consists of billions of neural cells that process information. Each neural cell considered a simple processing system. The interconnected web of neurons, also known as a __biological neural network__, transmits information through electrical signals from neuron to neuron. 
