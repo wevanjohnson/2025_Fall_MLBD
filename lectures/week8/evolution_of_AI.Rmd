@@ -1,0 +1,179 @@
+---
+title: "The Evolution of AI: Predictive, Generative, and Agentic"
+author: | 
+  | W. Evan Johnson, Ph.D.
+  | Professor, Division of Infectious Disease
+  | Director, Center for Data Science
+  | Associate Director, Center for Biomedical Informatics and Health AI
+  | Rutgers University -- New Jersey Medical School
+date: "`r Sys.Date()`"
+header-includes:
+  - \usepackage{amsmath}
+  - \usepackage{xcolor}
+  - \setbeamercolor{frametitle}{fg=black}
+  - \usepackage{graphicx}
+  - \usebackgroundtemplate{\includegraphics[width=\paperwidth]{nnFigs/RH_template_Page_2.png}}
+  - \addtobeamertemplate{frametitle}{\vspace*{.25in}}{\vspace*{.25in}}
+  - \setbeamerfont{frametitle}{size=\huge}
+  - \usepackage{tikz}
+output: 
+  beamer_presentation
+classoption: aspectratio=169 
+editor_options: 
+  chunk_output_type: console
+tables: true
+---
+
+```{r, include=F}
+library(knitr)
+opts_chunk$set(echo = TRUE,
+               out.width = "50%", 
+               fig.align = "center")
+library(caret)
+library(tidyverse)
+# Updated image path for this module's figures
+img_path <- "aiFigs/" 
+```
+
+## From Prediction to Agency
+
+\Large
+Understanding the paradigm shift in Artificial Intelligence.
+
+## A Timeline of AI Capabilities
+
+\Large
+
+1. Predictive AI
+
+\begin{itemize}
+\item Goal: Forecast and Classify
+\item Focuses on analyzing historical data to predict future outcomes or categorize inputs.
+\end{itemize}
+
+## A Timeline of AI Capabilities
+
+\Large
+2. Generative AI
+
+\begin{itemize}
+\item Goal: Create and Ideate
+\item Focuses on learning patterns to generate new, original content (text, image, code).
+\end{itemize}
+
+## A Timeline of AI Capabilities
+
+\Large
+3. Agentic AI
+
+\begin{itemize}
+\item Goal: Act and Solve
+\item Focuses on autonomous decision-making and tool usage to achieve multi-step goals.
+\end{itemize}
+
+## Predictive AI: The Foundation of Machine Learning
+
+\Large
+Predictive AI, often referred to as "Traditional AI" or "Discriminative AI," is designed to perform a specific task by analyzing data and making a decision or prediction.
+
+Function: Maps input variables to output classes or values.
+
+Mechanism: Minimizes error between predicted and actual outcomes based on training data.
+
+Key Question: "Based on the past, what is likely to happen next?"
+
+## Predictive AI: The Foundation of Machine Learning
+```{r, echo=F}
+knitr::include_graphics(paste0(img_path, "predictive_dashboard.png"))
+```
+
+## Predictive AI Techniques
+
+\Large
+
+**Regression:** Predicting continuous values, such as housing prices, stock trends, or disease progression scores based on input features.
+
+**Classification**: Categorizing data into distinct classes, such as spam detection, medical diagnosis (Benign vs. Malignant), or image recognition.
+
+**Clustering:** Unsupervised learning to find hidden structures or groups within data, often used for customer segmentation or genomic analysis.
+
+## Generative AI
+
+\Large
+Generative AI represents a shift from analyzing existing data to creating new data. It learns the underlying probability distribution of a dataset to generate novel samples similar to the original.
+
+## Generative AI
+
+\Large
+Creation vs. Prediction: Unlike predictive models that output a label or number, GenAI outputs complex artifacts like essays, realistic images, functional code, or synthetic biological data.
+
+Core Mechanism: Large Language Models (LLMs), Diffusion Models, and Generative Adversarial Networks (GANs).
+
+Key Question: "Can you create something new that looks like what you've seen before?"
+
+## Generative AI
+
+```{r, echo=F}
+knitr::include_graphics(paste0(img_path, "generative_art.png"))
+```
+
+## Powering Generative AI
+
+\Large
+
+**Large Language Models (LLMs)**: Built on the Transformer architecture, these models use self-attention mechanisms to predict the next token in a sequence. They excel at understanding context, summarization, and translation.
+
+**Diffusion Models** A class of models that generate high-quality images by gradually removing noise from a random signal. They are the engine behind powerful text-to-image synthesis tools.
+
+## Agentic AI
+
+\Large
+Agentic AI refers to systems that can autonomously perceive, reason, and act to achieve high-level goals. They don't just "talk"; they "do."
+
+**Autonomy:** Capable of planning multi-step workflows without constant human intervention.
+
+**Tool Use:** Can browse the web, write and execute code, or query databases.
+
+**Looping:** Operates in a "Perception-Action-Observation" loop to correct errors and refine strategies.
+
+## Agentic AI
+```{r, echo=F}
+knitr::include_graphics(paste0(img_path, "autonomous_agent.png"))
+```
+
+## The Architecture of Agency
+
+\Large
+
+**Perception (Sensors):** The agent gathers information from its environment (e.g., reading a file, browsing a webpage, or receiving a user prompt).
+
+**Reasoning (Brain):** Usually an LLM that breaks down the goal into a plan, decides which tools to use, and reflects on past outputs.
+
+**Action (Tools):** The execution layer where the agent utilizes APIs, calculators, or code interpreters to effect change or retrieve data.
+
+## Comparative Analysis
+
+| Feature | Predictive AI | Generative AI | Agentic AI |
+| :--- | :--- | :--- | :--- |
+| Primary Goal | Forecast accuracy & Classification | Content creation & Human-like response | Task completion & Autonomous action |
+| Interaction | Input $\rightarrow$ Class/Value | Prompt $\rightarrow$ Response (Chat) | Goal $\rightarrow$ Multi-step Workflow |
+| Output | Numbers, Labels, Probabilities | Text, Images, Audio, Code | Completed Tasks, API Calls, File Edits |
+| Reasoning | Statistical correlations | Pattern matching & Probability | Planning, Reflection, & Tool Selection |
+
+## The Future: Multi-Agent Systems
+
+\Large
+We are moving towards ecosystems where specialized agents (coders, researchers, designers) collaborate to solve complex problems.
+
+The role of humans is shifting from "operator" to "manager" of these agent swarms, focusing on high-level strategy and oversight rather than execution detail.
+
+## Questions & Discussion
+
+\Large
+Thank you for your attention.
+
+## Session Info
+\tiny
+```{r session}
+sessionInfo()
+```
